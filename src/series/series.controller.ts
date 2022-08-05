@@ -9,6 +9,7 @@ import {
   Logger,
   HttpStatus,
   HttpException,
+  HttpCode,
 } from '@nestjs/common';
 import { SeriesService } from './series.service';
 import { CreateSeriesDto } from './dto/create-series.dto';
@@ -59,8 +60,14 @@ export class SeriesController {
   async findOne(@Param('id') id: string) {
     this.logger.debug(`Fetching series with id : ${id}`);
     const series = await this.seriesService.findOne(id);
-    this.logger.debug(`Fetched series with id : ${id}`);
-    return new SeriesResponseDto(series);
+
+    // check if series exist
+    if (series) {
+      this.logger.debug(`Fetched series with id : ${id}`);
+      return new SeriesResponseDto(series);
+    } else {
+      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    }
   }
 
   @Patch(':id')
@@ -69,6 +76,26 @@ export class SeriesController {
     @Body() updateSeriesDto: UpdateSeriesDto,
   ) {
     this.logger.debug(`Updating series with id : ${id}`);
+
+    // if name is to be updated verify that series with given name do not exist
+    const seriesName = updateSeriesDto.name;
+    if (seriesName) {
+      this.logger.debug(`Verifying series name '${seriesName} is unique`);
+      const series = await this.seriesService.findOneWithName(seriesName);
+      if (series && id !== series.id) {
+        // series with given name already exist
+        this.logger.error(`Series with name : ${seriesName} already exist`);
+        throw new HttpException(
+          `Series with name '${seriesName}' already exist`,
+          HttpStatus.BAD_REQUEST,
+        );
+      } else {
+        this.logger.debug(`Series name '$SeriesName} is unique`);
+      }
+    } else {
+      this.logger.log(`Series name is not provided for update`);
+    }
+
     this.logger.verbose(
       `Updating series with id : ${id} with data`,
       updateSeriesDto,
@@ -86,10 +113,14 @@ export class SeriesController {
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string): Promise<void> {
     this.logger.debug(`Deleting series with id : ${id}`);
     const deletedSeries = await this.seriesService.remove(id);
-    this.logger.debug(`Deleted series with id : ${id}`);
-    return new SeriesResponseDto(deletedSeries);
+    if (deletedSeries) {
+      this.logger.debug(`Deleted series with id : ${id}`);
+    } else {
+      this.logger.debug(`Series with id : $${id} do not exist`);
+    }
   }
 }
