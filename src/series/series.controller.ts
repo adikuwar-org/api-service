@@ -7,6 +7,8 @@ import {
   Param,
   Delete,
   Logger,
+  HttpStatus,
+  HttpException,
 } from '@nestjs/common';
 import { SeriesService } from './series.service';
 import { CreateSeriesDto } from './dto/create-series.dto';
@@ -20,6 +22,23 @@ export class SeriesController {
 
   @Post()
   async create(@Body() createSeriesDto: CreateSeriesDto) {
+    // Verify name uniqueness
+    const seriesName: string = createSeriesDto.name;
+    this.logger.debug(
+      `Verifying series with name : ${seriesName} do not exsit`,
+    );
+    const series = await this.seriesService.findOneWithName(seriesName);
+
+    if (series) {
+      this.logger.error(`Series with name : ${seriesName} already exist`);
+      throw new HttpException(
+        `Series with name '${seriesName}' already exist`,
+        HttpStatus.BAD_REQUEST,
+      );
+    } else {
+      this.logger.debug(`Series name : ${seriesName} is unique`);
+    }
+
     this.logger.log('Creating series');
     this.logger.verbose('Creating series : ', createSeriesDto);
     const createdSeries = await this.seriesService.create(createSeriesDto);

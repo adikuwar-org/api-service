@@ -30,6 +30,15 @@ export class SeriesService {
     return this.seriesModel.findById(id).exec();
   }
 
+  async findOneWithName(name: string): Promise<SeriesDocument> {
+    this.logger.debug(`Fetching series with name : ${name}`);
+    return this.seriesModel
+      .findOne({
+        name,
+      })
+      .exec();
+  }
+
   async update(
     id: string,
     updateSeriesDto: UpdateSeriesDto,

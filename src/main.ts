@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const configService = app.get(ConfigService);
   const port = configService.get('PORT') || 3000;
-  const logger = new Logger();
+  const logger = new Logger('main');
   logger.log(`starting api service on port : ${port}`);
   await app.listen(port);
 }
