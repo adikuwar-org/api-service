@@ -1,8 +1,8 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
+import { CreateSeries } from './dto/create-series.dto';
+import { UpdateSeries } from './dto/update-series.dto';
 import { Series, SeriesDocument } from './schemas/series.schema';
 
 export enum SeriesErrors {
@@ -23,7 +23,7 @@ export class SeriesService {
     return mongoose.Types.ObjectId.isValid(objectId);
   }
 
-  async create(createSeriesDto: CreateSeriesDto): Promise<SeriesDocument> {
+  async create(createSeriesDto: CreateSeries): Promise<SeriesDocument> {
     this.logger.log('Creating series');
     // Verify name uniqueness
     const seriesName: string = createSeriesDto.name;
@@ -68,7 +68,7 @@ export class SeriesService {
 
   async update(
     id: string,
-    updateSeriesDto: UpdateSeriesDto,
+    updateSeriesDto: UpdateSeries,
   ): Promise<SeriesDocument> {
     this.logger.debug(`Updating series with id : ${id}`);
     // verify series exists

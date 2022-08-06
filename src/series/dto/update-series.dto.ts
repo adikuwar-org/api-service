@@ -1,4 +1,11 @@
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateSeriesDto } from './create-series.dto';
+import { IsNotEmpty, IsString } from 'class-validator';
 
-export class UpdateSeriesDto extends PartialType(CreateSeriesDto) {}
+export class UpdateSeries {
+  /**
+   * Name of the Series
+   * @example 'World Cup'
+   */
+  @IsNotEmpty()
+  @IsString()
+  readonly name?: string;
+}
