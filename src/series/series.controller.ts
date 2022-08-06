@@ -15,7 +15,8 @@ import {
 import { SeriesService, SeriesErrors } from './series.service';
 import { CreateSeriesDto } from './dto/create-series.dto';
 import { UpdateSeriesDto } from './dto/update-series.dto';
-import { SeriesResponseDto } from './dto/series-response.dto';
+import { Series } from './entities/series.entity';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 
 class SeriesNameUniquenessException extends HttpException {
   constructor(seriesName) {
@@ -32,14 +33,20 @@ class SeriesInvalidIdException extends HttpException {
   }
 }
 
+@ApiTags('series')
 @Controller('series')
 export class SeriesController {
   private readonly logger = new Logger(SeriesController.name);
 
   constructor(private readonly seriesService: SeriesService) {}
 
+  /**
+   * Creates Series
+   * @param createSeriesDto Request Body to create series
+   * @returns created Series
+   */
   @Post()
-  async create(@Body() createSeriesDto: CreateSeriesDto) {
+  async create(@Body() createSeriesDto: CreateSeriesDto): Promise<Series> {
     this.logger.log('Creating series');
     this.logger.verbose('Creating series : ', createSeriesDto);
 
@@ -57,19 +64,33 @@ export class SeriesController {
 
     this.logger.debug(`Series created with id : ${createdSeries.id}`);
     this.logger.verbose(`Created series`, createdSeries.toObject());
-    return new SeriesResponseDto(createdSeries);
+    return new Series(createdSeries);
   }
 
+  /**
+   * Fetches list of series
+   * @returns List of series
+   */
   @Get()
-  async findAll() {
+  async findAll(): Promise<Series[]> {
     this.logger.log('Fetching series');
     const seriesList = await this.seriesService.findAll();
     this.logger.debug(`Fetched ${seriesList.length} series`);
-    return seriesList.map((series) => new SeriesResponseDto(series));
+    return seriesList.map((series) => new Series(series));
   }
 
+  /**
+   * Fetches Series specified by ID
+   * @param id of the series to be fetched
+   * @returns series for the specified id
+   */
   @Get(':id')
-  async findOne(@Param('id') id: string) {
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the series to be fetched',
+    example: '62ed1c0022738d3d35b23712',
+  })
+  async findOne(@Param('id') id: string): Promise<Series> {
     this.logger.debug(`Fetching series with id : ${id}`);
 
     let series;
@@ -89,17 +110,28 @@ export class SeriesController {
     // check if series exist
     if (series) {
       this.logger.debug(`Fetched series with id : ${id}`);
-      return new SeriesResponseDto(series);
+      return new Series(series);
     } else {
       throw new NotFoundException();
     }
   }
 
+  /**
+   * Updates properties of a Series
+   * @param id Id of the series to be updated
+   * @param updateSeriesDto Body of the request
+   * @returns updated series
+   */
   @Patch(':id')
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the series to be updated',
+    example: '62ed1c0022738d3d35b23712',
+  })
   async update(
     @Param('id') id: string,
     @Body() updateSeriesDto: UpdateSeriesDto,
-  ) {
+  ): Promise<Series> {
     this.logger.debug(`Updating series with id : ${id}`);
     this.logger.verbose(
       `Updating series with id : ${id} with data`,
@@ -128,9 +160,18 @@ export class SeriesController {
     }
     this.logger.debug(`Updated series with id : ${id}`);
     this.logger.debug(`Fetching updated series with id : ${id}`);
-    return new SeriesResponseDto(updatedSeries);
+    return new Series(updatedSeries);
   }
 
+  /**
+   * Deletes a series
+   * @param id Id of the series to be deleted
+   */
+  @ApiParam({
+    name: 'id',
+    description: 'Id of the series to be deleted',
+    example: '62ed1c0022738d3d35b23712',
+  })
   @Delete(':id')
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
