@@ -1,6 +1,6 @@
 import { IsNotEmpty, IsString } from 'class-validator';
 
-export class CreateSeriesDto {
+export class CreateSeries {
   /**
    * Name of the Series
    * @example 'World Cup'

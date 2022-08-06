@@ -19,7 +19,6 @@ async function bootstrap() {
     .setTitle('CSC API Service')
     .setDescription('CSC API Service Swagger Specification')
     .setVersion('1.0')
-    .addTag('csc-api')
     .addTag('series')
     .build();
 

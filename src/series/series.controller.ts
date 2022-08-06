@@ -13,8 +13,8 @@ import {
   NotFoundException,
 } from '@nestjs/common';
 import { SeriesService, SeriesErrors } from './series.service';
-import { CreateSeriesDto } from './dto/create-series.dto';
-import { UpdateSeriesDto } from './dto/update-series.dto';
+import { CreateSeries } from './dto/create-series.dto';
+import { UpdateSeries } from './dto/update-series.dto';
 import { Series } from './entities/series.entity';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 
@@ -46,7 +46,7 @@ export class SeriesController {
    * @returns created Series
    */
   @Post()
-  async create(@Body() createSeriesDto: CreateSeriesDto): Promise<Series> {
+  async create(@Body() createSeriesDto: CreateSeries): Promise<Series> {
     this.logger.log('Creating series');
     this.logger.verbose('Creating series : ', createSeriesDto);
 
@@ -130,7 +130,7 @@ export class SeriesController {
   })
   async update(
     @Param('id') id: string,
-    @Body() updateSeriesDto: UpdateSeriesDto,
+    @Body() updateSeriesDto: UpdateSeries,
   ): Promise<Series> {
     this.logger.debug(`Updating series with id : ${id}`);
     this.logger.verbose(
