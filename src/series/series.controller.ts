@@ -27,6 +27,8 @@ class SeriesNameUniquenessException extends HttpException {
   }
 }
 
+    
+
 class SeriesInvalidIdException extends HttpException {
   constructor(id) {
     super(`Series id '${id}' is invalid`, HttpStatus.BAD_REQUEST);
