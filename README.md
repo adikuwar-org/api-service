@@ -21,6 +21,8 @@
 </p>
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+  
+![main](https://github.com/adikuwar-org/api-service/actions/workflows/node.js.yml/badge.svg?branch=main)
 
 ## Description
 
