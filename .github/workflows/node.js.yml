@@ -10,7 +10,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  test:
+  lint:
 
     runs-on: ubuntu-latest
 
@@ -24,9 +24,9 @@ jobs:
     - run: npm ci
     - run: npm run build --if-present
     - run: npm run lint:test
-    - run: npm test
   
-  coverage:
+  unit-test-and-coverage:
+    needs: lint
 
     permissions:
       checks: write
@@ -37,4 +37,9 @@ jobs:
     
     steps:
       - uses: actions/checkout@v3
+      - name: Use Node.js 16.15.1
+        uses: actions/setup-node@v3
+        with:
+          node-version: 16.15.1
+          cache: 'npm'
       - uses: ArtiomTr/jest-coverage-report-action@v2
