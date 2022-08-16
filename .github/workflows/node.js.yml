@@ -43,3 +43,5 @@ jobs:
           node-version: 16.15.1
           cache: 'npm'
       - uses: ArtiomTr/jest-coverage-report-action@v2
+        with:
+          annotations: none
