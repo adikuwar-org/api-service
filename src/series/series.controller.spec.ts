@@ -1,9 +1,24 @@
 import { Test, TestingModule } from '@nestjs/testing';
+import mongoose from 'mongoose';
 import { SeriesController } from './series.controller';
 import { SeriesService, SeriesErrors } from './series.service';
 
 describe('SeriesController', () => {
   let controller: SeriesController;
+  const existingSeries = [
+    {
+      name: 'Series 1',
+      _id: '62ee91648e835835481d53fa',
+    },
+    {
+      name: 'Series 2',
+      _id: '62ee91648e835835481d53fb',
+    },
+    {
+      name: 'Series 3',
+      _id: '62ee91648e835835481d53fc',
+    },
+  ];
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
@@ -18,29 +33,31 @@ describe('SeriesController', () => {
               }
               return Promise.resolve({
                 name: series.name,
-                _id: 'id',
+                _id: '62ee91648e835835481d53fa',
                 toObject: () => {
                   return {
                     name: series.name,
-                    _id: 'id',
+                    _id: '62ee91648e835835481d53fa',
                   };
                 },
               });
             }),
-            findAll: jest.fn().mockResolvedValue([
-              {
-                name: 'Series 1',
-                _id: 'id1',
-              },
-              {
-                name: 'Series 2',
-                _id: 'id2',
-              },
-              {
-                name: 'Series 3',
-                _id: 'id3',
-              },
-            ]),
+            findAll: jest.fn().mockResolvedValue(existingSeries),
+            findOne: jest.fn().mockImplementation((id: string) => {
+              if (!mongoose.Types.ObjectId.isValid(id)) {
+                throw new Error(SeriesErrors.InvalidObjectId);
+              }
+
+              const index = existingSeries.findIndex(
+                (series) => series._id === id,
+              );
+
+              if (index < 0) {
+                return Promise.resolve(null);
+              } else {
+                return Promise.resolve(existingSeries[index]);
+              }
+            }),
           },
         },
       ],
@@ -61,7 +78,7 @@ describe('SeriesController', () => {
 
       const expectedSeries = {
         name: 'Series 1',
-        id: 'id',
+        id: '62ee91648e835835481d53fa',
       };
 
       expect(createdSeries).toEqual(expectedSeries);
@@ -83,19 +100,44 @@ describe('SeriesController', () => {
       const expectedSeriesList = [
         {
           name: 'Series 1',
-          id: 'id1',
+          id: '62ee91648e835835481d53fa',
         },
         {
           name: 'Series 2',
-          id: 'id2',
+          id: '62ee91648e835835481d53fb',
         },
         {
           name: 'Series 3',
-          id: 'id3',
+          id: '62ee91648e835835481d53fc',
         },
       ];
 
       expect(seriesList).toEqual(expectedSeriesList);
     });
+  });
+
+  describe('SeriesController.findOne', () => {
+    it('should return series', async () => {
+      const series = await controller.findOne(existingSeries[0]._id);
+
+      const expectedSeries = {
+        name: existingSeries[0].name,
+        id: existingSeries[0]._id,
+      };
+
+      expect(series).toEqual(expectedSeries);
+    });
+  });
+
+  it('should throw error when id is invalid', async () => {
+    return expect(controller.findOne('invalid')).rejects.toThrow(
+      `Series id 'invalid' is invalid`,
+    );
+  });
+
+  it('should throw error when series with id does not exist', async () => {
+    return expect(
+      controller.findOne('62ee91648e835835481d53fd'),
+    ).rejects.toThrow('Not Found');
   });
 });
