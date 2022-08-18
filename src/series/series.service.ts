@@ -45,8 +45,7 @@ export class SeriesService {
 
     // create series
     this.logger.verbose('Creating series : ', createSeriesDto);
-    const createdSeries = new this.seriesModel(createSeriesDto);
-    return createdSeries.save();
+    return this.seriesModel.create(createSeriesDto);
   }
 
   async findAll(): Promise<SeriesDocument[]> {
