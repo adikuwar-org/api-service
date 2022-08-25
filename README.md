@@ -2,7 +2,20 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+CSC - API Service
+
+## Pre-requisites
+
+To run and build this project following dependencies must be configured.
+
+- [Typescript](https://www.typescriptlang.org/id/download)
+- MongoDB (Either install manually or Deploy on [MongoDB Atlas](https://www.mongodb.com/atlas/database))
+- Configure environment variables. See Configure environment variables
+
+## Configure environment variables
+
+1. Create .env file by using .env-template.
+2. Update `Username`, `Password`, `Mongo_Host` and `Database_Name` as per your MongoDB Instance.
 
 ## Installation
 
@@ -19,6 +32,9 @@ $ npm run start
 # watch mode
 $ npm run start:dev
 
+# debug mode
+$ npm run start:debug
+
 # production mode
 $ npm run start:prod
 ```
@@ -29,6 +45,9 @@ $ npm run start:prod
 # unit tests
 $ npm run test
 
+# unit tests in debug mode
+$npm run test:debug
+
 # e2e tests
 $ npm run test:e2e
 
@@ -36,16 +55,7 @@ $ npm run test:e2e
 $ npm run test:cov
 ```
 
-## Support
+## Linting
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
-
-## Stay in touch
-
-- Author - [Kamil Myśliwiec](https://kamilmysliwiec.com)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
-
-## License
-
-Nest is [MIT licensed](LICENSE).
+- Install and configure [ESLint Extension](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint) on vscode.
+- to Manually lint execute : `npm run lint`
