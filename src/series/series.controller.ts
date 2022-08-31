@@ -69,7 +69,7 @@ export class SeriesController {
 
   /**
    * Fetches list of series
-   * @returns List of series
+   * @returns list of series
    */
   @Get()
   async findAll(): Promise<Series[]> {
@@ -159,7 +159,6 @@ export class SeriesController {
       }
     }
     this.logger.debug(`Updated series with id : ${id}`);
-    this.logger.debug(`Fetching updated series with id : ${id}`);
     return new Series(updatedSeries);
   }
 

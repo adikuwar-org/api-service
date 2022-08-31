@@ -9,12 +9,17 @@ export class Users {
     required: true,
     unique: true,
   })
-  username: string;
+  userName: string;
 
   @Prop({
     required: true,
   })
   password: string;
+
+  @Prop({
+    required: true,
+  })
+  hashRounds: number;
 
   @Prop({
     required: true,
