@@ -20,8 +20,8 @@ async function bootstrap() {
     .setDescription('CSC API Service Swagger Specification')
     .setVersion('1.0')
     .addTag('series')
+    .addTag('users')
     .build();
-
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('swagger', app, document);
 

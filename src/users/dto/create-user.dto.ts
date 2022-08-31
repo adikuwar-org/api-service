@@ -1,3 +1,4 @@
+import { ApiHideProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsString } from 'class-validator';
 
 export class CreateUser {
@@ -16,6 +17,7 @@ export class CreateUser {
   @IsString()
   password: string;
 
+  @ApiHideProperty()
   hashRounds: number;
 
   /**

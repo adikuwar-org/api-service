@@ -92,35 +92,13 @@ export class UsersService {
       throw new Error(UsersErrors.NotFound);
     }
 
-    // if username is to be updated verify that user with given name do not exists
-    const userName = updateUserDto.userName;
+    this.logger.debug(`Updating user with id : ${id}`);
 
-    if (userName) {
-      this.logger.debug(`Verifying username ${userName} is unique`);
-      const userWithSameUserName = await this.usersModel
-        .findOne()
-        .where('userName')
-        .equals(userName)
-        .where('_id')
-        .ne(id)
-        .exec();
-
-      if (userWithSameUserName) {
-        // user with given username already exists
-        this.logger.error(`User with username : ${userName} already exists`);
-        throw new Error(UsersErrors.userNameUniquenessError);
-      } else {
-        this.logger.log(`Username is not provided for update`);
-      }
-
-      this.logger.debug(`Updating user with id : ${id}`);
-
-      return await this.usersModel
-        .findByIdAndUpdate(id, updateUserDto, {
-          new: true,
-        })
-        .exec();
-    }
+    return await this.usersModel
+      .findByIdAndUpdate(id, updateUserDto, {
+        new: true,
+      })
+      .exec();
   }
 
   remove(id: number) {

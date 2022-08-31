@@ -167,8 +167,6 @@ export class UsersController {
       this.logger.error(`Failed to update user with id : ${id}`);
       this.logger.error('Due to error : ', error);
       switch (error.message) {
-        case UsersErrors.userNameUniquenessError:
-          throw new UserNameUniquenessException(updateUserDto.userName);
         case UsersErrors.NotFound:
           throw new NotFoundException();
         case UsersErrors.InvalidObjectId:
