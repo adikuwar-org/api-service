@@ -12,7 +12,12 @@ async function bootstrap() {
   logger.log(`starting api service on port : ${port}`);
 
   // add validation Pipe
-  app.useGlobalPipes(new ValidationPipe());
+  app.useGlobalPipes(
+    new ValidationPipe({
+      whitelist: true,
+      forbidNonWhitelisted: true,
+    }),
+  );
 
   // bootstrap swagger module
   const config = new DocumentBuilder()

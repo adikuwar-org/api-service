@@ -11,6 +11,7 @@ import {
   HttpStatus,
   InternalServerErrorException,
   NotFoundException,
+  HttpCode,
 } from '@nestjs/common';
 import { UsersErrors, UsersService } from './users.service';
 import { CreateUser } from './dto/create-user.dto';
@@ -180,8 +181,35 @@ export class UsersController {
     return new User(updatedUser);
   }
 
+  /**
+   * Deletes a user
+   * @param id Id of the user to be deleted
+   * @returns deleted user
+   */
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.usersService.remove(+id);
+  @HttpCode(HttpStatus.NO_CONTENT)
+  async remove(@Param('id') id: string): Promise<void> {
+    this.logger.debug(`Deleting user with id : ${id}`);
+
+    let deletedUser;
+
+    try {
+      deletedUser = await this.usersService.remove(id);
+    } catch (error) {
+      this.logger.error(`Failed to delete user with id : ${id}`);
+      switch (error.message) {
+        case UsersErrors.InvalidObjectId:
+          throw new UserInvalidObjectIdException(id);
+        default:
+          throw error;
+      }
+    }
+
+    if (deletedUser) {
+      this.logger.debug(`Delete user with id : ${id}`);
+    } else {
+      this.logger.error(`User with id : ${id} do not exists`);
+      throw new NotFoundException();
+    }
   }
 }

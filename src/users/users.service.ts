@@ -101,7 +101,16 @@ export class UsersService {
       .exec();
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} user`;
+  async remove(id: string): Promise<UsersDocument> {
+    // verify user id is valid
+    if (this.isValidObjectId(id)) {
+      this.logger.debug(`User id ${id} is valid`);
+    } else {
+      this.logger.error(`User id ${id} is invalid`);
+      throw new Error(UsersErrors.InvalidObjectId);
+    }
+
+    this.logger.debug(`Removing user with id : ${id}`);
+    return this.usersModel.findByIdAndDelete(id);
   }
 }
