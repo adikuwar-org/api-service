@@ -8,10 +8,10 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  password: string;
+  password?: string;
 
   @ApiHideProperty()
-  hashRounds: number;
+  hashRounds?: number;
 
   /**
    * First Name of the User
@@ -20,7 +20,7 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  readonly firstName: string;
+  readonly firstName?: string;
 
   /**
    * Last Name of the User
@@ -29,5 +29,5 @@ export class UpdateUserDto {
   @IsString()
   @IsNotEmpty()
   @IsOptional()
-  readonly lastName: string;
+  readonly lastName?: string;
 }

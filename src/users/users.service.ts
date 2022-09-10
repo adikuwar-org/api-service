@@ -111,6 +111,6 @@ export class UsersService {
     }
 
     this.logger.debug(`Removing user with id : ${id}`);
-    return this.usersModel.findByIdAndDelete(id);
+    return this.usersModel.findByIdAndDelete(id).exec();
   }
 }
