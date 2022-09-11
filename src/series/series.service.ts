@@ -70,7 +70,6 @@ export class SeriesService {
     updateSeriesDto: UpdateSeries,
   ): Promise<SeriesDocument> {
     this.logger.debug(`Updating series with id : ${id}`);
-    // verify series exists
 
     // verify id is valid ObjectId
     if (this.isValidObjectId(id)) {
@@ -80,6 +79,7 @@ export class SeriesService {
       throw new Error(SeriesErrors.InvalidObjectId);
     }
 
+    // verify series exists
     this.logger.debug(`Verifying series with id : ${id} exists`);
 
     const existingSeries = await this.seriesModel.findById(id).exec();

@@ -9,7 +9,11 @@ CSC - API Service
 To run and build this project following dependencies must be configured.
 
 - [Typescript](https://www.typescriptlang.org/id/download)
-- MongoDB (Either install manually or Deploy on [MongoDB Atlas](https://www.mongodb.com/atlas/database))
+- MongoDB (Either install manually or Deploy on [MongoDB Atlas](https://www.mongodb.com/atlas/database))   
+To Setup MongoDB via docker, update `MONGO_INITDB_ROOT_USERNAME`, `MONGO_INITDB_ROOT_PASSWORD`, `ME_CONFIG_MONGODB_ADMINUSERNAME` and `ME_CONFIG_MONGODB_ADMINPASSWORD` in `/mongo/docker-compose.yaml` and run:   
+`cd mongo`   
+`docker-compose -f docker-compose.yaml`   
+Access Mongo Express Via URL : `http://localhost:8081/`
 - Configure environment variables. See Configure environment variables
 
 ## Configure environment variables
@@ -53,6 +57,9 @@ $ npm run test:e2e
 
 # test coverage
 $ npm run test:cov
+
+# integration tests
+$ npm run test:integ
 ```
 
 ## Linting
