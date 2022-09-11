@@ -12,6 +12,7 @@ const config = {
     '/src/main.ts',
     '/src/app.module.ts',
     '/src/series/series.module.ts',
+    '/src/users/users.module.ts',
   ],
   testEnvironment: 'node',
   coverageThreshold: {

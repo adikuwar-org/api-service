@@ -18,7 +18,7 @@ export class CreateUser {
   password: string;
 
   @ApiHideProperty()
-  hashRounds: number;
+  hashRounds?: number;
 
   /**
    * First Name of the user

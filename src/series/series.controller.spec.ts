@@ -176,18 +176,18 @@ describe('SeriesController', () => {
 
       expect(series).toEqual(expectedSeries);
     });
-  });
 
-  it('should throw error when id is invalid', async () => {
-    return expect(controller.findOne('invalid')).rejects.toThrow(
-      `Series id 'invalid' is invalid`,
-    );
-  });
+    it('should throw error when id is invalid', async () => {
+      return expect(controller.findOne('invalid')).rejects.toThrow(
+        `Series id 'invalid' is invalid`,
+      );
+    });
 
-  it('should throw error when series with id does not exist', async () => {
-    return expect(
-      controller.findOne('62ee91648e835835481d53fd'),
-    ).rejects.toThrow('Not Found');
+    it('should throw error when series with id does not exist', async () => {
+      return expect(
+        controller.findOne('62ee91648e835835481d53fd'),
+      ).rejects.toThrow('Not Found');
+    });
   });
 
   describe('SeriesController.update', () => {
