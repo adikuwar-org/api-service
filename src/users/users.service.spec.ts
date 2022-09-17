@@ -4,10 +4,17 @@ import { Model } from 'mongoose';
 import { Users } from './schemas/users.schema';
 import { UsersErrors, UsersService } from './users.service';
 import * as _ from 'lodash';
+import { ConfigService } from '@nestjs/config';
 
 describe('UsersService', () => {
   let service: UsersService;
   let model: Model<Users>;
+  let hashRounds;
+  let adminUserName;
+  let adminFirstName;
+  let adminLastName;
+  let adminPassword;
+
   const usersArray = [
     {
       firstName: 'firstName',
@@ -50,6 +57,27 @@ describe('UsersService', () => {
             findByIdAndDelete: jest.fn(),
           },
         },
+        {
+          provide: ConfigService,
+          useValue: {
+            get: jest.fn().mockImplementation((key) => {
+              switch (key) {
+                case 'HASH_ROUNDS':
+                  return hashRounds;
+                case 'ADMIN_USERNAME':
+                  return adminUserName;
+                case 'ADMIN_FIRST_NAME':
+                  return adminFirstName;
+                case 'ADMIN_LAST_NAME':
+                  return adminLastName;
+                case 'ADMIN_PASSWORD':
+                  return adminPassword;
+                default:
+                  return null;
+              }
+            }),
+          },
+        },
       ],
     }).compile();
 
@@ -66,6 +94,9 @@ describe('UsersService', () => {
   });
 
   describe('UsersService.create', () => {
+    beforeEach(() => {
+      hashRounds = 10;
+    });
     afterEach(() => {
       jest.restoreAllMocks();
     });
@@ -221,6 +252,94 @@ describe('UsersService', () => {
       expect(service.remove('invalid')).rejects.toThrow(
         UsersErrors.InvalidObjectId,
       );
+    });
+  });
+
+  describe('UserService.onModuleInit', () => {
+    beforeEach(() => {
+      hashRounds = 10;
+      adminUserName = 'Administrator';
+      adminFirstName = 'admin';
+      adminLastName = 'admin';
+      adminPassword = 'password';
+    });
+    afterEach(() => jest.restoreAllMocks());
+
+    it('should create initial admin user', async () => {
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      jest
+        .spyOn(model, 'create')
+        .mockImplementationOnce(() => Promise.resolve({}));
+      await service.onModuleInit();
+      return expect(model.create).toHaveBeenCalled();
+    });
+
+    it('should throw error if admin userName is not configured', async () => {
+      adminUserName = null;
+      return expect(service.onModuleInit()).rejects.toThrow(
+        'Administrator userName is not configured',
+      );
+    });
+
+    it('should throw error if admin firstName is not configured', async () => {
+      adminFirstName = null;
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      return expect(service.onModuleInit()).rejects.toThrow(
+        'Administrator first name is not configured',
+      );
+    });
+
+    it('should throw error if admin lastName is not configured', async () => {
+      adminLastName = null;
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      return expect(service.onModuleInit()).rejects.toThrow(
+        'Administrator last name is not configured',
+      );
+    });
+
+    it('should throw error if admin password is not configured', async () => {
+      adminPassword = null;
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      return expect(service.onModuleInit()).rejects.toThrow(
+        'Administrator password is not configured',
+      );
+    });
+
+    it('should not create admin user if already exists', async () => {
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce({}),
+      } as any);
+      await service.onModuleInit();
+      expect(model.findOne).toBeCalled();
+      expect(model.create).toBeCalledTimes(0);
+    });
+
+    it('should throw error when hashRounds is not a number', async () => {
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      hashRounds = null;
+      return expect(service.onModuleInit()).rejects.toThrow(
+        'Invalid value for HashRounds : NaN',
+      );
+    });
+
+    it('should throw error when failed to create admin user', async () => {
+      jest.spyOn(model, 'findOne').mockReturnValue({
+        exec: jest.fn().mockResolvedValueOnce(null),
+      } as any);
+      jest
+        .spyOn(model, 'create')
+        .mockImplementationOnce(() => Promise.reject(new Error('error')));
+      return expect(service.onModuleInit()).rejects.toThrow('error');
     });
   });
 });
