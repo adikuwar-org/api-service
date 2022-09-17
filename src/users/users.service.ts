@@ -34,9 +34,11 @@ export class UsersService implements OnModuleInit {
     }
 
     this.logger.log('Checking Initial Administrator is present or not');
-    const existingAdministrator = await this.usersModel.findOne({
-      userName,
-    });
+    const existingAdministrator = await this.usersModel
+      .findOne({
+        userName,
+      })
+      .exec();
 
     if (existingAdministrator) {
       this.logger.log('Initial Administrator user is present');
@@ -97,16 +99,7 @@ export class UsersService implements OnModuleInit {
         hashRounds,
       };
 
-      const administrator = await this.usersModel.create(userDto);
-
-      if (administrator) {
-        this.logger.log('Sucessfully created Initial Administrator');
-      } else {
-        const failedToCreateAdminError =
-          'Failed to create Initial Administrator';
-        this.logger.error(failedToCreateAdminError);
-        throw new Error(failedToCreateAdminError);
-      }
+      await this.usersModel.create(userDto);
     }
   }
 
