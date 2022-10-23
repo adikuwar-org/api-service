@@ -23,6 +23,9 @@ const config = {
       lines: 90,
     },
   },
+  moduleNameMapper: {
+    '^src/(.*)$': '<rootDir>/$1',
+  },
 };
 
 module.exports = config;
