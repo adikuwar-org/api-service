@@ -21,9 +21,11 @@ async function bootstrap() {
 
   // bootstrap swagger module
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('CSC API Service')
     .setDescription('CSC API Service Swagger Specification')
     .setVersion('1.0')
+    .addTag('auth')
     .addTag('series')
     .addTag('users')
     .build();

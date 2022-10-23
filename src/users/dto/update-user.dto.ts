@@ -1,4 +1,3 @@
-import { ApiHideProperty } from '@nestjs/swagger';
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
@@ -9,9 +8,6 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsOptional()
   password?: string;
-
-  @ApiHideProperty()
-  hashRounds?: number;
 
   /**
    * First Name of the User

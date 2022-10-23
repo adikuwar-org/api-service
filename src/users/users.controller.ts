@@ -16,7 +16,7 @@ import {
 import { UsersErrors, UsersService } from './users.service';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
@@ -37,6 +37,7 @@ class UserInvalidObjectIdException extends HttpException {
 }
 
 @ApiTags('users')
+@ApiBearerAuth()
 @Controller('users')
 export class UsersController {
   private readonly logger = new Logger(UsersController.name);
@@ -63,9 +64,6 @@ export class UsersController {
       this.logger.error('Invalid value for HashRounds : NaN');
       throw new InternalServerErrorException();
     }
-
-    // add the hash rounds to the user.
-    createUserDto.hashRounds = hashRounds;
 
     this.logger.debug(`Hashing password using hashRounds : ${hashRounds}`);
     const password = createUserDto.password;

@@ -21,7 +21,6 @@ describe('UsersService', () => {
       lastName: 'lastName',
       userName: 'userName',
       password: 'hashedPassword',
-      hashRounds: 10,
       _id: '62ee91648e835835481d53fa',
     },
     {
@@ -29,7 +28,6 @@ describe('UsersService', () => {
       lastName: 'lastName1',
       userName: 'userName1',
       password: 'hashedPassword1',
-      hashRounds: 10,
       _id: '62ee91648e835835481d53fb',
     },
     {
@@ -37,7 +35,6 @@ describe('UsersService', () => {
       lastName: 'lastName2',
       userName: 'userName2',
       password: 'hashedPassword2',
-      hashRounds: 10,
       _id: '62ee91648e835835481d53fc',
     },
   ];
@@ -114,7 +111,6 @@ describe('UsersService', () => {
         lastName: 'lastName',
         userName: 'userName',
         password: 'hashedPassword',
-        hashRounds: 10,
       };
 
       const createdUser = await service.create(_.cloneDeep(user));
@@ -124,7 +120,6 @@ describe('UsersService', () => {
         lastName: 'lastName',
         userName: 'userName',
         password: 'hashedPassword',
-        hashRounds: 10,
         _id: 'id',
       };
 

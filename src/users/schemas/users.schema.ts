@@ -19,11 +19,6 @@ export class Users {
   @Prop({
     required: true,
   })
-  hashRounds: number;
-
-  @Prop({
-    required: true,
-  })
   firstName: string;
 
   @Prop({

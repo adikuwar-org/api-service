@@ -96,7 +96,6 @@ export class UsersService implements OnModuleInit {
         lastName,
         userName,
         password,
-        hashRounds,
       };
 
       await this.usersModel.create(userDto);
@@ -148,6 +147,15 @@ export class UsersService implements OnModuleInit {
 
     this.logger.debug(`Fetching user with id : ${id}`);
     return this.usersModel.findById(id).exec();
+  }
+
+  async findOneWithUserName(userName: string): Promise<UsersDocument> {
+    this.logger.debug(`Fetching user with userName : ${userName}`);
+    return this.usersModel
+      .findOne({
+        userName,
+      })
+      .exec();
   }
 
   async update(
