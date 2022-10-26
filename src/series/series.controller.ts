@@ -16,7 +16,7 @@ import { SeriesService, SeriesErrors } from './series.service';
 import { CreateSeries } from './dto/create-series.dto';
 import { UpdateSeries } from './dto/update-series.dto';
 import { Series } from './entities/series.entity';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 
 class SeriesNameUniquenessException extends HttpException {
   constructor(seriesName) {
@@ -34,6 +34,7 @@ class SeriesInvalidIdException extends HttpException {
 }
 
 @ApiTags('series')
+@ApiBearerAuth()
 @Controller('series')
 export class SeriesController {
   private readonly logger = new Logger(SeriesController.name);
