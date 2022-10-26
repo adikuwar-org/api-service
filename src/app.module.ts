@@ -4,7 +4,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { SeriesModule } from './series/series.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
-import { JwtAuthGuard } from './auth/jwt-auth.guard';
+import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 
 @Module({
   imports: [

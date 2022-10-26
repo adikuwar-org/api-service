@@ -3,8 +3,8 @@ import { ApiBody, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { LoginDto } from './dto/login.dto';
 import { LoginReponse } from './entities/login-response.entity';
-import { SkipAuth } from './jwt-auth.guard';
-import { LocalAuthGuard } from './local-auth.guard';
+import { SkipAuth } from './guards/jwt-auth.guard';
+import { LocalAuthGuard } from './guards/local-auth.guard';
 
 @ApiTags('auth')
 @Controller('auth')

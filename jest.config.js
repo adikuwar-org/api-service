@@ -7,20 +7,14 @@ const config = {
   },
   collectCoverageFrom: ['**/*.(t|j)s'],
   coverageDirectory: '../coverage',
-  coveragePathIgnorePatterns: [
-    '/node_modules/',
-    '/src/main.ts',
-    '/src/app.module.ts',
-    '/src/series/series.module.ts',
-    '/src/users/users.module.ts',
-  ],
+  coveragePathIgnorePatterns: ['/node_modules/'],
   testEnvironment: 'node',
   coverageThreshold: {
     global: {
-      statements: 90,
-      branches: 85,
-      functions: 90,
-      lines: 90,
+      statements: 80,
+      branches: 80,
+      functions: 80,
+      lines: 80,
     },
   },
   moduleNameMapper: {
