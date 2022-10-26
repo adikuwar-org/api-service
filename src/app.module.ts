@@ -5,6 +5,7 @@ import { SeriesModule } from './series/series.module';
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
+import { CaslModule } from './casl/casl.module';
 
 @Module({
   imports: [
@@ -21,6 +22,7 @@ import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
     SeriesModule,
     UsersModule,
     AuthModule,
+    CaslModule,
   ],
   providers: [
     {

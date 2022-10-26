@@ -3,6 +3,7 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { UsersService } from 'src/users/users.service';
 import { AuthService } from './auth.service';
 import * as _ from 'lodash';
+import { Roles } from 'src/users/schemas/users.schema';
 
 describe('AuthService', () => {
   let service: AuthService;
@@ -12,6 +13,7 @@ describe('AuthService', () => {
     userName: 'userName',
     password: '$2b$10$mtazwWiosirW6Y.O.LeCF.hjnl4fcKbA6/aeIn4anMED4XtYsy.AG',
     _id: '62ee91648e835835481d53fa',
+    role: Roles.Administrator,
   };
 
   beforeEach(async () => {
@@ -56,6 +58,7 @@ describe('AuthService', () => {
         firstName: existingUser.firstName,
         lastName: existingUser.lastName,
         userName: existingUser.userName,
+        role: existingUser.role,
       };
       expect(user).toEqual(expectedUser);
     });
@@ -78,6 +81,7 @@ describe('AuthService', () => {
         firstName: existingUser.firstName,
         lastName: existingUser.lastName,
         userName: existingUser.userName,
+        role: existingUser.role,
       };
       const response = await service.login(user);
       expect(response).toEqual({

@@ -1,5 +1,6 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import mongoose from 'mongoose';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 import { SeriesController } from './series.controller';
 import { SeriesService, SeriesErrors } from './series.service';
 
@@ -109,6 +110,7 @@ describe('SeriesController', () => {
             }),
           },
         },
+        CaslAbilityFactory,
       ],
     }).compile();
 
