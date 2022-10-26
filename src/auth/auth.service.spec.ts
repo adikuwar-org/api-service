@@ -25,6 +25,8 @@ describe('AuthService', () => {
               .mockImplementation((userName: string) => {
                 if (userName === 'userName') {
                   return _.cloneDeep(existingUser);
+                } else {
+                  return null;
                 }
               }),
           },
