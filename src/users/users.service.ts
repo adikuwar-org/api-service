@@ -4,7 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import mongoose, { Model } from 'mongoose';
 import { CreateUser } from './dto/create-user.dto';
 import { UpdateUserDto } from './dto/update-user.dto';
-import { Users, UsersDocument } from './schemas/users.schema';
+import { Roles, Users, UsersDocument } from './schemas/users.schema';
 import * as bcrypt from 'bcrypt';
 
 export enum UsersErrors {
@@ -96,6 +96,7 @@ export class UsersService implements OnModuleInit {
         lastName,
         userName,
         password,
+        role: Roles.Administrator,
       };
 
       await this.usersModel.create(userDto);

@@ -1,4 +1,4 @@
-import { UsersDocument } from '../schemas/users.schema';
+import { Roles, UsersDocument } from '../schemas/users.schema';
 
 export class User {
   /**
@@ -25,10 +25,16 @@ export class User {
    */
   readonly lastName: string;
 
+  /** Role of the user
+   * @example Viewer
+   */
+  readonly role: Roles;
+
   constructor(user: UsersDocument) {
     this.id = user._id;
     this.userName = user.userName;
     this.firstName = user.firstName;
     this.lastName = user.lastName;
+    this.role = user.role;
   }
 }

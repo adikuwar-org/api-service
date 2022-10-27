@@ -3,6 +3,13 @@ import { Document } from 'mongoose';
 
 export type UsersDocument = Users & Document;
 
+export enum Roles {
+  Administrator = 'Admininistrator',
+  Manager = 'Manager',
+  Author = 'Author',
+  Viewer = 'Viewer',
+}
+
 @Schema()
 export class Users {
   @Prop({
@@ -25,6 +32,11 @@ export class Users {
     required: true,
   })
   lastName: string;
+
+  @Prop({
+    required: true,
+  })
+  role: Roles;
 }
 
 export const UsersSchema = SchemaFactory.createForClass(Users);

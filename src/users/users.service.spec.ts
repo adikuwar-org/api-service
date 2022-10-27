@@ -1,7 +1,7 @@
 import { getModelToken } from '@nestjs/mongoose';
 import { Test, TestingModule } from '@nestjs/testing';
 import { Model } from 'mongoose';
-import { Users } from './schemas/users.schema';
+import { Roles, Users } from './schemas/users.schema';
 import { UsersErrors, UsersService } from './users.service';
 import * as _ from 'lodash';
 import { ConfigService } from '@nestjs/config';
@@ -22,6 +22,7 @@ describe('UsersService', () => {
       userName: 'userName',
       password: 'hashedPassword',
       _id: '62ee91648e835835481d53fa',
+      role: Roles.Administrator,
     },
     {
       firstName: 'firstName1',
@@ -29,6 +30,7 @@ describe('UsersService', () => {
       userName: 'userName1',
       password: 'hashedPassword1',
       _id: '62ee91648e835835481d53fb',
+      role: Roles.Administrator,
     },
     {
       firstName: 'firstName2',
@@ -36,6 +38,7 @@ describe('UsersService', () => {
       userName: 'userName2',
       password: 'hashedPassword2',
       _id: '62ee91648e835835481d53fc',
+      role: Roles.Administrator,
     },
   ];
 
@@ -111,6 +114,7 @@ describe('UsersService', () => {
         lastName: 'lastName',
         userName: 'userName',
         password: 'hashedPassword',
+        role: Roles.Administrator,
       };
 
       const createdUser = await service.create(_.cloneDeep(user));
@@ -121,6 +125,7 @@ describe('UsersService', () => {
         userName: 'userName',
         password: 'hashedPassword',
         _id: 'id',
+        role: Roles.Administrator,
       };
 
       expect(createdUser).toEqual(expectedUser);
@@ -135,6 +140,7 @@ describe('UsersService', () => {
           password: 'hashedPassword',
           hasRounds: 10,
           _id: 'id',
+          role: Roles.Administrator,
         }),
       } as any);
 
@@ -144,6 +150,7 @@ describe('UsersService', () => {
         userName: 'userName',
         password: 'hashedPassword',
         hashRounds: 10,
+        role: Roles.Administrator,
       };
 
       return expect(service.create(user)).rejects.toThrow(

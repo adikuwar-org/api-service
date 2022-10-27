@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsString } from 'class-validator';
+import { Roles } from '../schemas/users.schema';
 
 export class CreateUser {
   /**
@@ -32,4 +33,10 @@ export class CreateUser {
   @IsNotEmpty()
   @IsString()
   readonly lastName: string;
+
+  /**
+   * Role of the User
+   */
+  @IsNotEmpty()
+  readonly role: Roles;
 }
