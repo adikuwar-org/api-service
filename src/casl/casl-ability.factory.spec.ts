@@ -1,5 +1,4 @@
 import { Series } from 'src/series/schemas/series.schema';
-import { User } from 'src/users/entities/user.entity';
 import { Roles, Users } from 'src/users/schemas/users.schema';
 import { Action, CaslAbilityFactory } from './casl-ability.factory';
 
