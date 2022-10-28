@@ -12,6 +12,7 @@ import {
   InternalServerErrorException,
   NotFoundException,
   HttpCode,
+  UseGuards,
 } from '@nestjs/common';
 import { UsersErrors, UsersService } from './users.service';
 import { CreateUser } from './dto/create-user.dto';
@@ -20,6 +21,12 @@ import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { User } from './entities/user.entity';
 import * as bcrypt from 'bcrypt';
 import { ConfigService } from '@nestjs/config';
+import { PoliciesGuard } from 'src/casl/guards/policies.guard';
+import { CheckPolicies } from 'src/casl/decorators/check-policies';
+import { CreateUserPolicyHandler } from 'src/users/policies/create-user-policy.handler';
+import { ReadUserPolicyHandler } from './policies/read-user-policy.handler';
+import { UpdateUserPolicyHandler } from './policies/update-user-policy.handler';
+import { DeleteUserPolicyHandler } from './policies/delete-user-policy.handler';
 
 class UserNameUniquenessException extends HttpException {
   constructor(userName) {
@@ -53,6 +60,8 @@ export class UsersController {
    * @returns created user
    */
   @Post()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new CreateUserPolicyHandler())
   async create(@Body() createUserDto: CreateUser): Promise<User> {
     this.logger.log('Creating User');
 
@@ -96,6 +105,8 @@ export class UsersController {
    * @returns list of series
    */
   @Get()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new ReadUserPolicyHandler())
   async findAll(): Promise<User[]> {
     this.logger.log('Fetching users');
     const usersList = await this.usersService.findAll();
@@ -109,6 +120,8 @@ export class UsersController {
    * @returns User for the spcified id
    */
   @Get(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new ReadUserPolicyHandler())
   @ApiParam({
     name: 'id',
     description: 'Id of the user to be fetched',
@@ -148,6 +161,8 @@ export class UsersController {
    * @returns updated user
    */
   @Patch(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new UpdateUserPolicyHandler())
   @ApiParam({
     name: 'id',
     description: 'Id of the user to be updated',
@@ -185,6 +200,8 @@ export class UsersController {
    * @returns deleted user
    */
   @Delete(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new DeleteUserPolicyHandler())
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
     this.logger.debug(`Deleting user with id : ${id}`);

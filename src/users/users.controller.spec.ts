@@ -6,6 +6,8 @@ import { UsersController } from './users.controller';
 import { UsersErrors, UsersService } from './users.service';
 import * as _ from 'lodash';
 import mongoose from 'mongoose';
+import { Roles } from './schemas/users.schema';
+import { CaslAbilityFactory } from 'src/casl/casl-ability.factory';
 
 describe('UsersController', () => {
   let controller: UsersController;
@@ -17,6 +19,7 @@ describe('UsersController', () => {
       userName: 'userName1',
       password: 'password1',
       _id: '62ee91648e835835481d53fa',
+      role: Roles.Administrator,
     },
     {
       firstName: 'firstName2',
@@ -24,6 +27,7 @@ describe('UsersController', () => {
       userName: 'userName2',
       password: 'password2',
       _id: '62ee91648e835835481d53fb',
+      role: Roles.Administrator,
     },
     {
       firstName: 'firstName3',
@@ -31,6 +35,7 @@ describe('UsersController', () => {
       userName: 'userName3',
       password: 'password3',
       _id: '62ee91648e835835481d53fc',
+      role: Roles.Administrator,
     },
   ];
 
@@ -59,6 +64,7 @@ describe('UsersController', () => {
                 password: user.password,
                 _id: '62ee91648e835835481d53fd',
                 id: '62ee91648e835835481d53fd',
+                role: user.role,
               });
             }),
             findAll: jest.fn().mockResolvedValue(_.cloneDeep(existingUsers)),
@@ -115,6 +121,7 @@ describe('UsersController', () => {
             }),
           },
         },
+        CaslAbilityFactory,
       ],
     }).compile();
 
@@ -132,6 +139,7 @@ describe('UsersController', () => {
         lastName: 'lastName',
         userName: 'userName',
         password: 'password',
+        role: Roles.Administrator,
       });
 
       const expectedUser: User = {
@@ -139,6 +147,7 @@ describe('UsersController', () => {
         lastName: 'lastName',
         userName: 'userName',
         id: '62ee91648e835835481d53fd',
+        role: Roles.Administrator,
       };
 
       expect(createdUser).toEqual(expectedUser);
@@ -152,6 +161,7 @@ describe('UsersController', () => {
           lastName: 'lastName',
           userName: 'userName',
           password: 'password',
+          role: Roles.Administrator,
         }),
       ).rejects.toThrow('Internal Server Error');
     });
@@ -164,6 +174,7 @@ describe('UsersController', () => {
           lastName: 'lastName',
           userName: 'userName',
           password: 'password',
+          role: Roles.Administrator,
         }),
       ).rejects.toThrow('Internal Server Error');
     });
@@ -175,6 +186,7 @@ describe('UsersController', () => {
           lastName: 'lastName1',
           userName: 'userName1',
           password: 'password1',
+          role: Roles.Administrator,
         }),
       ).rejects.toThrow(`User with username 'userName1' already exist`);
     });
@@ -189,18 +201,21 @@ describe('UsersController', () => {
           lastName: 'lastName1',
           userName: 'userName1',
           id: '62ee91648e835835481d53fa',
+          role: Roles.Administrator,
         },
         {
           firstName: 'firstName2',
           lastName: 'lastName2',
           userName: 'userName2',
           id: '62ee91648e835835481d53fb',
+          role: Roles.Administrator,
         },
         {
           firstName: 'firstName3',
           lastName: 'lastName3',
           userName: 'userName3',
           id: '62ee91648e835835481d53fc',
+          role: Roles.Administrator,
         },
       ];
       expect(users).toEqual(expectedUsers);
@@ -216,6 +231,7 @@ describe('UsersController', () => {
         lastName: existingUser.lastName,
         userName: existingUser.userName,
         id: existingUser._id,
+        role: Roles.Administrator,
       };
       expect(user).toEqual(expectedUser);
     });
@@ -245,6 +261,7 @@ describe('UsersController', () => {
         lastName: existingUser.lastName,
         userName: existingUser.userName,
         id: existingUser._id,
+        role: Roles.Administrator,
       };
 
       expect(updatedUser).toEqual(expectedUser);

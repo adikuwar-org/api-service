@@ -1,4 +1,5 @@
 import { IsNotEmpty, IsOptional, IsString } from 'class-validator';
+import { Roles } from '../schemas/users.schema';
 
 export class UpdateUserDto {
   /**
@@ -26,4 +27,11 @@ export class UpdateUserDto {
   @IsNotEmpty()
   @IsOptional()
   readonly lastName?: string;
+
+  /**
+   * Role of the User
+   */
+  @IsNotEmpty()
+  @IsOptional()
+  readonly role?: Roles;
 }

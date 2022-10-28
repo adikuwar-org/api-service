@@ -11,12 +11,19 @@ import {
   HttpException,
   HttpCode,
   NotFoundException,
+  UseGuards,
 } from '@nestjs/common';
 import { SeriesService, SeriesErrors } from './series.service';
 import { CreateSeries } from './dto/create-series.dto';
 import { UpdateSeries } from './dto/update-series.dto';
 import { Series } from './entities/series.entity';
 import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { PoliciesGuard } from 'src/casl/guards/policies.guard';
+import { CheckPolicies } from 'src/casl/decorators/check-policies';
+import { CreateSeriesPolicyHandler } from './policies/create-series-policy.handler';
+import { ReadSeriesPolicyHandler } from './policies/read-series-policy.handler';
+import { UpdateSeriesPolicyHandler } from './policies/update-series-policy.handler';
+import { DeleteSeriesPolicyHandler } from './policies/delete-series-policy.handler';
 
 class SeriesNameUniquenessException extends HttpException {
   constructor(seriesName) {
@@ -47,6 +54,8 @@ export class SeriesController {
    * @returns created Series
    */
   @Post()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new CreateSeriesPolicyHandler())
   async create(@Body() createSeriesDto: CreateSeries): Promise<Series> {
     this.logger.log('Creating series');
     this.logger.verbose('Creating series : ', createSeriesDto);
@@ -73,6 +82,8 @@ export class SeriesController {
    * @returns list of series
    */
   @Get()
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new ReadSeriesPolicyHandler())
   async findAll(): Promise<Series[]> {
     this.logger.log('Fetching series');
     const seriesList = await this.seriesService.findAll();
@@ -86,6 +97,8 @@ export class SeriesController {
    * @returns series for the specified id
    */
   @Get(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new ReadSeriesPolicyHandler())
   @ApiParam({
     name: 'id',
     description: 'Id of the series to be fetched',
@@ -124,6 +137,8 @@ export class SeriesController {
    * @returns updated series
    */
   @Patch(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new UpdateSeriesPolicyHandler())
   @ApiParam({
     name: 'id',
     description: 'Id of the series to be updated',
@@ -173,6 +188,8 @@ export class SeriesController {
     example: '62ed1c0022738d3d35b23712',
   })
   @Delete(':id')
+  @UseGuards(PoliciesGuard)
+  @CheckPolicies(new DeleteSeriesPolicyHandler())
   @HttpCode(HttpStatus.NO_CONTENT)
   async remove(@Param('id') id: string): Promise<void> {
     this.logger.debug(`Deleting series with id : ${id}`);
