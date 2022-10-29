@@ -23,6 +23,7 @@ Access Mongo Express Via URL : `http://localhost:8081/`
 2. Update `Username`, `Password`, `Mongo_Host` and `Database_Name` as per your MongoDB Instance.
 3. Configure details for Initial Admin User. Update `ADMIN_USERNAME`, `ADMIN_FIRST_NAME`, `ADMIN_LAST_NAME` and `ADMIN_PASSWORD`
 4. Configure details for JWT. Update `JWT_SECRET_KEY` and `JWT_EXPIRES_IN`
+5. Configure Rate Limiting for api endpoints. Update `THROTTLE_TTL` and `THROTTLE_LIMIT`.
 
 ## Installation
 
