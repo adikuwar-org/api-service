@@ -6,6 +6,9 @@ import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { CaslModule } from './casl/casl.module';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+
+const APP_GUARD = 'APP_GUARD';
 
 @Module({
   imports: [
@@ -23,11 +26,23 @@ import { CaslModule } from './casl/casl.module';
     UsersModule,
     AuthModule,
     CaslModule,
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        ttl: config.get('THROTTLE_TTL'),
+        limit: config.get('THROTTLE_LIMIT'),
+      }),
+    }),
   ],
   providers: [
     {
-      provide: 'APP_GUARD',
+      provide: APP_GUARD,
       useClass: JwtAuthGuard,
+    },
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
     },
   ],
 })
