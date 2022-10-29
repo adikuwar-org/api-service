@@ -3,6 +3,7 @@ import { ConfigService } from '@nestjs/config';
 import { NestFactory } from '@nestjs/core';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { AppModule } from './app.module';
+import helmet from 'helmet';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
@@ -10,6 +11,9 @@ async function bootstrap() {
   const port = configService.get('PORT') || 3000;
   const logger = new Logger('main');
   logger.log(`starting api service on port : ${port}`);
+
+  // bootstrap helmet
+  app.use(helmet());
 
   // add validation Pipe
   app.useGlobalPipes(
